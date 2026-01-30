@@ -4,10 +4,11 @@ resource "azurerm_lb" "lb" {
   location            = each.value.location
   resource_group_name = each.value.resource_group_name
 
-  frontend_ip_configuration {
-    name                 = each.value.frontend_ip_configuration.frontend_ip_name
-    public_ip_address_id = data.azurerm_public_ip.pip-data[each.key].id
-  }
+frontend_ip_configuration {
+  name                          = each.value.frontend_ip_configuration.frontend_ip_name
+  subnet_id                     = data.azurerm_subnet.subnet-lb-data[each.key].id
+  private_ip_address_allocation = "Dynamic"
+}
 }
 
 resource "azurerm_lb_probe" "lb_probe" {
